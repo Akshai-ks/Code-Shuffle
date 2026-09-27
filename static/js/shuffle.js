@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let fetchedQuote = null;
     let fetchError = null;
 
-    fetch('/api/shuffle')
+    const fetchPromise = fetch('/api/shuffle')
       .then(res => res.json())
       .then(data => {
         if (data.success && data.quote) {
@@ -118,7 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           // STEP 6: Final Quote Reveal & Sparkle Bloom (3.6s)
-          setTimeout(() => {
+          setTimeout(async () => {
+            await fetchPromise;
             if (fetchedQuote) {
               renderPaperQuote(fetchedQuote);
               renderFloatingHearts();

@@ -167,7 +167,7 @@ def delete_quote(quote_id):
     # Auto-resolve any associated reports in DB
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("UPDATE reports SET status = 'resolved' WHERE quote_id = ? AND status = 'pending'", (quote_id,))
+    cursor.execute("UPDATE reports SET status = 'resolved' WHERE quote_id = %s AND status = 'pending'", (quote_id,))
     conn.commit()
     conn.close()
 
@@ -207,3 +207,4 @@ def delete_category(category_id):
     CategoryModel.delete_category(category_id)
     flash('Category deleted.', 'info')
     return redirect(url_for('admin.categories'))
+
