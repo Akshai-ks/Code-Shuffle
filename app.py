@@ -1,5 +1,8 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, url_for
+
+load_dotenv()
 from database.db import init_db
 from routes.auth import auth_bp
 from routes.main import main_bp
