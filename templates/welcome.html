@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Rotaract Club — St. Thomas College (Autonomous), Thrissur{% endblock %}
+
+{% block content %}
+
+<!-- =========================================================
+     HOMEPAGE OPENING SCREEN: EDITORIAL ROTARACT COMPOSITION
+     ========================================================= -->
+<div class="welcome-opening-screen">
+  
+  <!-- Soft Lower Campus Photograph Visual Element (Subtle low-opacity background) -->
+  <div class="welcome-campus-overlay" aria-hidden="true">
+    <img src="{{ url_for('static', filename='images/st-thomas-campus.png') }}" 
+         alt="St. Thomas College Campus Soft Background" 
+         class="welcome-campus-img">
+  </div>
+
+  <!-- Dedicated Botanical Framing Layer (4 Deliberate Vector Variations) -->
+  <div class="homepage-botanicals-frame" aria-hidden="true">
+    <!-- Top Left Corner Subtle Leaves -->
+    <svg class="homepage-botanical top-left" viewBox="0 0 160 160" fill="none">
+      <path d="M10 10C50 40 90 60 150 70" stroke="#D4145A" stroke-width="2" stroke-linecap="round"/>
+      <path d="M30 25C45 15 65 20 70 35C50 45 35 40 30 25Z" fill="#D4145A" fill-opacity="0.28"/>
+      <path d="M75 42C90 32 110 38 115 52C95 62 80 58 75 42Z" fill="#E85A86" fill-opacity="0.22"/>
+    </svg>
+
+    <!-- Top Right Corner Subtle Leaves -->
+    <svg class="homepage-botanical top-right" viewBox="0 0 160 160" fill="none">
+      <path d="M150 10C110 40 70 60 10 70" stroke="#D4145A" stroke-width="2" stroke-linecap="round"/>
+      <path d="M130 25C115 15 95 20 90 35C110 45 125 40 130 25Z" fill="#D4145A" fill-opacity="0.28"/>
+      <path d="M85 42C70 32 50 38 45 52C65 62 80 58 85 42Z" fill="#E85A86" fill-opacity="0.22"/>
+    </svg>
+
+    <!-- Mid Left Side Accent Branch -->
+    <svg class="homepage-botanical mid-left" viewBox="0 0 140 180" fill="none">
+      <path d="M0 90C40 70 80 60 130 50" stroke="#D4145A" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M35 75C50 62 70 68 75 82C55 92 40 88 35 75Z" fill="#D4145A" fill-opacity="0.30"/>
+      <path d="M75 62C90 50 110 56 115 70C95 80 80 75 75 62Z" fill="#F3B3C7" fill-opacity="0.35"/>
+    </svg>
+
+    <!-- Mid Right Side Accent Branch -->
+    <svg class="homepage-botanical mid-right" viewBox="0 0 140 180" fill="none">
+      <path d="M140 90C100 70 60 60 10 50" stroke="#E85A86" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M105 75C90 62 70 68 65 82C85 92 100 88 105 75Z" fill="#E85A86" fill-opacity="0.30"/>
+      <path d="M65 62C50 50 30 56 25 70C45 80 60 75 65 62Z" fill="#D4145A" fill-opacity="0.25"/>
+    </svg>
+
+    <!-- Bottom Left Complementary Floral Branch B -->
+    <svg class="homepage-botanical bottom-left" viewBox="0 0 240 240" fill="none">
+      <path d="M10 230C60 170 120 120 230 40" stroke="#D4145A" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M50 190C35 165 52 140 78 148C88 175 70 200 50 190Z" fill="#D4145A" fill-opacity="0.35"/>
+      <path d="M98 145C85 120 102 95 128 102C138 130 120 155 98 145Z" fill="#E85A86" fill-opacity="0.30"/>
+      <path d="M148 100C135 75 152 50 178 58C188 85 170 110 148 100Z" fill="#F3B3C7" fill-opacity="0.40"/>
+      
+      <!-- Flower Blossom Left -->
+      <g transform="translate(130, 110)">
+        <circle cx="0" cy="-10" r="7" fill="#D4145A" fill-opacity="0.45"/>
+        <circle cx="9" cy="-3" r="7" fill="#E85A86" fill-opacity="0.40"/>
+        <circle cx="6" cy="8" r="7" fill="#D4145A" fill-opacity="0.45"/>
+        <circle cx="-6" cy="8" r="7" fill="#E85A86" fill-opacity="0.40"/>
+        <circle cx="-9" cy="-3" r="7" fill="#D4145A" fill-opacity="0.45"/>
+        <circle cx="0" cy="0" r="3.5" fill="#FF7A00" fill-opacity="0.70"/>
+      </g>
+    </svg>
+
+    <!-- Bottom Right Main Floral Branch A (Rising towards center with Flower Blossoms) -->
+    <svg class="homepage-botanical bottom-right" viewBox="0 0 280 280" fill="none">
+      <path d="M270 270C200 190 130 130 20 30" stroke="#D4145A" stroke-width="3" stroke-linecap="round"/>
+      <path d="M100 230C140 210 170 185 190 150" stroke="#D4145A" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M220 220C245 195 240 165 212 155C190 178 198 208 220 220Z" fill="#D4145A" fill-opacity="0.40"/>
+      <path d="M165 165C190 140 185 110 158 100C135 122 142 152 165 165Z" fill="#E85A86" fill-opacity="0.32"/>
+      <path d="M110 110C135 85 130 55 102 45C80 68 88 98 110 110Z" fill="#D4145A" fill-opacity="0.35"/>
+      
+      <!-- Flower Blossom Main Right -->
+      <g transform="translate(185, 145)">
+        <circle cx="0" cy="-11" r="8.5" fill="#D4145A" fill-opacity="0.55"/>
+        <circle cx="10" cy="-3" r="8.5" fill="#E85A86" fill-opacity="0.50"/>
+        <circle cx="6" cy="9" r="8.5" fill="#D4145A" fill-opacity="0.55"/>
+        <circle cx="-6" cy="9" r="8.5" fill="#E85A86" fill-opacity="0.50"/>
+        <circle cx="-10" cy="-3" r="8.5" fill="#D4145A" fill-opacity="0.55"/>
+        <circle cx="0" cy="0" r="4" fill="#FF7A00" fill-opacity="0.80"/>
+      </g>
+
+      <!-- Smaller Flower Blossom Secondary -->
+      <g transform="translate(125, 85)">
+        <circle cx="0" cy="-8" r="6" fill="#E85A86" fill-opacity="0.50"/>
+        <circle cx="7" cy="-2" r="6" fill="#D4145A" fill-opacity="0.45"/>
+        <circle cx="4" cy="7" r="6" fill="#E85A86" fill-opacity="0.50"/>
+        <circle cx="-4" cy="7" r="6" fill="#D4145A" fill-opacity="0.45"/>
+        <circle cx="-7" cy="-2" r="6" fill="#E85A86" fill-opacity="0.50"/>
+        <circle cx="0" cy="0" r="3" fill="#FF7A00" fill-opacity="0.75"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Central Editorial Column Container -->
+  <div class="welcome-content-container">
+    
+    <!-- Prominent Rotaract Logo Image -->
+    <div class="welcome-logo-container animate-fade-up">
+      <img src="{{ url_for('static', filename='images/rotaract-logo.png') }}" 
+           alt="Rotaract Official Logo" 
+           class="welcome-logo-img">
+    </div>
+
+    <!-- Main Hero Text: Handwritten Script Tagline & Thin Underline -->
+    <div class="welcome-tagline-wrapper animate-fade-up" style="animation-delay: 0.2s;">
+      <h1 class="welcome-tagline-script">Discover. Share. Inspire.</h1>
+      <div class="welcome-tagline-underline"></div>
+    </div>
+
+    <!-- 4. Centered CTA Button -->
+    <div class="animate-fade-up" style="animation-delay: 0.45s;">
+      <a href="{{ url_for('main.discover') }}" class="btn-welcome-cta glow-pink">
+        GET STARTED →
+      </a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+

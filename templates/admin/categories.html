@@ -1,0 +1,66 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block admin_content %}
+<div class="page-header" style="text-align: left; margin-bottom: 1.5rem;">
+  <h2 style="font-size: 1.75rem;">Category Manager</h2>
+  <p class="page-subtitle">Add or manage quote categories available across the platform.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start;">
+  
+  <!-- Add New Category Form -->
+  <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem;">
+    <h3 style="margin-bottom: 1rem;">Add New Category</h3>
+    
+    <form action="{{ url_for('admin.categories') }}" method="POST">
+      <div class="form-group">
+        <label class="form-label" for="name">Category Name</label>
+        <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Innovation" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="slug">URL Slug</label>
+        <input type="text" id="slug" name="slug" class="form-input" placeholder="e.g. innovation" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="icon">Emoji Icon</label>
+        <input type="text" id="icon" name="icon" class="form-input" placeholder="e.g. 💡" value="✨">
+      </div>
+
+      <button type="submit" class="btn-pink btn-block" style="padding: 0.75rem;">+ Create Category</button>
+    </form>
+  </div>
+
+  <!-- Categories Table -->
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Icon</th>
+          <th>Name</th>
+          <th>Slug</th>
+          <th>Approved Quotes</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr>
+          <td style="font-size: 1.5rem;">{{ cat.icon }}</td>
+          <td style="font-weight: 600; color: var(--text-primary);">{{ cat.name }}</td>
+          <td style="font-family: monospace; color: var(--text-secondary);">{{ cat.slug }}</td>
+          <td style="font-weight: 700;">{{ cat.quote_count }}</td>
+          <td>
+            <form action="{{ url_for('admin.delete_category', category_id=cat.id) }}" method="POST" onsubmit="return confirm('Delete this category? Quotes in this category will also be removed.')">
+              <button type="submit" class="btn-danger btn-xs">🗑️ Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

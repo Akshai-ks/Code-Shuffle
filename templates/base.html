@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Rotaract Club - St. Thomas College (Autonomous), Thrissur{% endblock %}</title>
+  <meta name="description" content="Discover inspiring thoughts with the Rotaract Club of St. Thomas College (Autonomous), Thrissur.">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="page-body">
+
+  <!-- Background SVG Botanical Leaf & Floral Illustrations (Vector Sharp) -->
+  <div class="botanical-bg-layer" aria-hidden="true">
+    <!-- Top Right Leaf Branch -->
+    <svg class="botanical-svg top-right" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M220 20C170 70 110 110 20 150" stroke="#D4145A" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M185 45C202 32 225 38 230 55C210 68 188 62 185 45Z" fill="#D4145A" fill-opacity="0.32"/>
+      <path d="M150 70C170 60 190 70 192 88C172 95 155 85 150 70Z" fill="#D4145A" fill-opacity="0.25"/>
+      <path d="M115 95C135 85 155 95 158 112C138 120 120 110 115 95Z" fill="#FF7A00" fill-opacity="0.22"/>
+      <path d="M80 120C100 110 120 120 122 138C102 145 85 135 80 120Z" fill="#D4145A" fill-opacity="0.30"/>
+    </svg>
+
+    <!-- Bottom Left Pink Botanical Leaves & Long Stem -->
+    <svg class="botanical-svg bottom-left" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Main curved stem -->
+      <path d="M10 270C70 200 140 140 270 40" stroke="#D4145A" stroke-width="3" stroke-linecap="round"/>
+      <!-- Side stem 1 -->
+      <path d="M70 210C110 190 140 170 160 140" stroke="#D4145A" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- Pointed Leaf 1 -->
+      <path d="M45 220C30 190 52 160 85 168C95 198 75 228 45 220Z" fill="#D4145A" fill-opacity="0.35"/>
+      <!-- Pointed Leaf 2 -->
+      <path d="M98 175C85 145 108 115 138 122C148 152 128 182 98 175Z" fill="#D4145A" fill-opacity="0.28"/>
+      <!-- Pointed Leaf 3 -->
+      <path d="M152 130C140 100 162 70 192 78C202 108 182 138 152 130Z" fill="#FF7A00" fill-opacity="0.30"/>
+      <!-- Pointed Leaf 4 -->
+      <path d="M205 85C195 55 218 25 248 32C258 62 238 92 205 85Z" fill="#D4145A" fill-opacity="0.38"/>
+      <!-- Small Bud Shapes -->
+      <circle cx="162" cy="138" r="4" fill="#D4145A" fill-opacity="0.45"/>
+      <circle cx="120" cy="178" r="3.5" fill="#FF7A00" fill-opacity="0.40"/>
+    </svg>
+
+    <!-- Bottom Right Soft Botanical Branch -->
+    <svg class="botanical-svg bottom-right" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M250 250C180 190 120 130 20 20" stroke="#FF7A00" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M200 200C225 180 230 155 210 142C185 160 180 185 200 200Z" fill="#FF7A00" fill-opacity="0.28"/>
+      <path d="M148 148C172 128 178 103 158 90C133 108 128 133 148 148Z" fill="#D4145A" fill-opacity="0.25"/>
+      <path d="M95 95C118 75 125 50 105 38C80 56 75 80 95 95Z" fill="#FF7A00" fill-opacity="0.28"/>
+    </svg>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header class="navbar" id="siteNavbar">
+    <div class="nav-container">
+      <a href="{{ url_for('main.welcome') }}" class="brand-logo-link">
+        <img src="{{ url_for('static', filename='images/rotaract-logo.png') }}" alt="Rotaract Club St. Thomas College Logo" class="brand-logo-img">
+        <span class="nav-brand-title">ROTARACT CLUB</span>
+      </a>
+
+      <div class="nav-actions">
+        {% if session.get('user_role') == 'admin' %}
+        <a href="{{ url_for('admin.dashboard') }}" class="user-badge-btn">⚡ Admin Workspace</a>
+        <a href="{{ url_for('auth.logout') }}" class="nav-logout-btn">Logout</a>
+        {% elif request.endpoint != 'main.discover' %}
+        <a href="{{ url_for('auth.admin_login') }}" class="nav-admin-link" title="Admin Moderation Portal">Admin Portal</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-wrapper">
+    <!-- Flash Messages -->
+    <div class="flash-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} animate-fade-up">
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Shared Modals -->
+  <!-- Share Card Modal -->
+  <div class="modal-overlay" id="shareModal">
+    <div class="modal-box text-center">
+      <button class="modal-close" onclick="closeShareModal()" aria-label="Close modal">&times;</button>
+      <h3 style="margin-bottom: 0.4rem; color: var(--text); font-size: 1.4rem;">Share Quote Card</h3>
+      <p style="color: var(--muted); font-size: 0.92rem; margin-bottom: 1.25rem;">
+        Branded quote image for Rotaract Club of St. Thomas College (Autonomous), Thrissur
+      </p>
+      
+      <div class="share-card-container">
+        <canvas id="shareCanvas"></canvas>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn-pink" onclick="downloadShareCard()">📥 Download Image</button>
+        <button class="btn-secondary" onclick="nativeShare()">↗ Share Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Quote Modal -->
+  <div class="modal-overlay" id="reportModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeReportModal()" aria-label="Close modal">&times;</button>
+      <h3 style="color: var(--text); margin-bottom: 0.25rem; font-size: 1.35rem;">Report Quote</h3>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Flag content for moderation by Rotaract admins.
+      </p>
+      
+      <form onsubmit="submitReport(event)">
+        <input type="hidden" id="reportQuoteId">
+        <div class="form-group">
+          <label class="form-label" for="reportReason">Reason for report</label>
+          <select class="form-select" id="reportReason" required>
+            <option value="">Select reason...</option>
+            <option value="Inappropriate Content">Inappropriate Content</option>
+            <option value="Spam / Unrelated">Spam / Unrelated</option>
+            <option value="Incorrect Author Attribution">Incorrect Author Attribution</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reportDetails">Additional details (optional)</label>
+          <textarea class="form-textarea" id="reportDetails" rows="3" placeholder="Provide extra context if needed..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" class="btn-secondary" onclick="closeReportModal()">Cancel</button>
+          <button type="submit" class="btn-pink">Submit Report</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <img src="{{ url_for('static', filename='images/rotaract-logo.png') }}" alt="Rotaract Logo" class="footer-logo">
+      <p class="footer-tagline">"DISCOVER. SHARE. INSPIRE."</p>
+      <p class="footer-credit">
+        Rotaract Club of St. Thomas College (Autonomous), Thrissur &copy; 2026
+      </p>
+    </div>
+  </footer>
+
+  <!-- Core Scripts -->
+  <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/interactions.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/shuffle.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
+

@@ -1,0 +1,133 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block admin_content %}
+<!-- Metrics Overview Cards -->
+<div class="admin-dashboard-grid">
+  <div class="metric-card">
+    <div class="metric-icon quotes">💬</div>
+    <div>
+      <div class="metric-val">{{ total_quotes }}</div>
+      <div class="metric-label">Total Quotes Pool</div>
+    </div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-icon approved">🟢</div>
+    <div>
+      <div class="metric-val">{{ approved_quotes }}</div>
+      <div class="metric-label">Approved Live Quotes</div>
+    </div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-icon pending">⏳</div>
+    <div>
+      <div class="metric-val">{{ pending_quotes }}</div>
+      <div class="metric-label">Pending Review</div>
+    </div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-icon reports">🚩</div>
+    <div>
+      <div class="metric-val">{{ pending_reports }}</div>
+      <div class="metric-label">Active Reports</div>
+    </div>
+  </div>
+
+  <div class="metric-card">
+    <div class="metric-icon likes">❤️</div>
+    <div>
+      <div class="metric-val">{{ total_likes }}</div>
+      <div class="metric-label">Total Likes</div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-dashboard-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+  
+  <!-- Pending Moderation Quick Action -->
+  <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+      <h3 style="font-size: 1.2rem;">Pending Review Queue</h3>
+      <a href="{{ url_for('admin.pending_quotes') }}" style="font-size: 0.85rem;">View All ({{ pending_quotes }}) →</a>
+    </div>
+
+    {% if recent_pending %}
+    <div class="table-responsive" style="margin-bottom: 0;">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Quote & Author</th>
+            <th>Category</th>
+            <th>Submitted By</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for q in recent_pending %}
+          <tr id="quote-row-{{ q.id }}">
+            <td>
+              <div style="font-weight: 600; margin-bottom: 0.2rem;">“{{ q.text[:50] }}{% if q.text|length > 50 %}...{% endif %}”</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);">— {{ q.author }}</div>
+            </td>
+            <td><span class="category-badge">{{ q.category_icon }} {{ q.category_name }}</span></td>
+            <td style="font-size: 0.85rem;">{{ q.submitted_by_name or 'Anonymous' }}</td>
+            <td>
+              <div class="action-toolbar">
+                <button class="btn-success btn-xs" onclick="updateQuoteStatus({{ q.id }}, 'approved', this)">✓ Approve</button>
+                <button class="btn-danger btn-xs" onclick="updateQuoteStatus({{ q.id }}, 'rejected', this)">✕ Reject</button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No pending quotes awaiting moderation! 🎉</p>
+    {% endif %}
+  </div>
+
+  <!-- Active Reports Quick Action -->
+  <div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+      <h3 style="font-size: 1.2rem;">Recent Reports</h3>
+      <a href="{{ url_for('admin.reports') }}" style="font-size: 0.85rem;">View All →</a>
+    </div>
+
+    {% if recent_reports %}
+    <div class="table-responsive" style="margin-bottom: 0;">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Quote</th>
+            <th>Reason</th>
+            <th>Reporter</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in recent_reports %}
+          <tr id="report-row-{{ r.id }}">
+            <td style="font-weight: 500;">“{{ r.quote_text[:40] }}...”</td>
+            <td><span class="status-badge status-pending">{{ r.reason }}</span></td>
+            <td style="font-size: 0.85rem;">{{ r.reporter_name }}</td>
+            <td>
+              <div class="action-toolbar">
+                <button class="btn-success btn-xs" onclick="resolveReport({{ r.id }}, 'dismissed')">Dismiss</button>
+                <button class="btn-danger btn-xs" onclick="deleteQuote({{ r.quote_id }})">Delete Quote</button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No active user reports! ✨</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

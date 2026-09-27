@@ -1,0 +1,67 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block admin_content %}
+<div class="page-header" style="text-align: left; margin-bottom: 1.5rem;">
+  <h2 style="font-size: 1.75rem;">Registered Students Management</h2>
+  <p class="page-subtitle">View student accounts, search directory, and manage access permissions.</p>
+</div>
+
+<!-- Search -->
+<div style="background: var(--surface-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.75rem;">
+  <form action="{{ url_for('admin.users') }}" method="GET" style="display: flex; gap: 1rem;">
+    <input type="text" name="search" class="form-input" placeholder="Search student name or email..." value="{{ search }}" style="flex: 1;">
+    <button type="submit" class="btn-pink">Search</button>
+  </form>
+</div>
+
+<div class="table-responsive">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Student Name</th>
+        <th>College Email</th>
+        <th>Role</th>
+        <th>Approved Quotes</th>
+        <th>Joined Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>#{{ u.id }}</td>
+        <td style="font-weight: 600; color: var(--text-primary);">{{ u.name }}</td>
+        <td style="color: var(--text-secondary); font-family: monospace;">{{ u.email }}</td>
+        <td>
+          {% if u.role == 'admin' %}
+          <span class="status-badge badge-featured">⚡ Admin</span>
+          {% else %}
+          <span class="status-badge">🎓 Student</span>
+          {% endif %}
+        </td>
+        <td style="font-weight: 600;">{{ u.approved_quotes_count }}</td>
+        <td style="font-size: 0.85rem; color: var(--text-secondary);">{{ u.created_at[:10] }}</td>
+        <td>
+          {% if u.is_blocked %}
+          <span class="status-badge status-blocked">🚫 Blocked</span>
+          {% else %}
+          <span class="status-badge status-active">🟢 Active</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if u.role != 'admin' %}
+          <button class="btn-secondary btn-xs {% if u.is_blocked %}btn-success{% else %}btn-danger{% endif %}" onclick="toggleBlockUser({{ u.id }}, this)">
+            {% if u.is_blocked %}✅ Unblock Student{% else %}🚫 Block Account{% endif %}
+          </button>
+          {% else %}
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Protected</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block admin_content %}
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem;">
+  <div class="page-header" style="text-align: left; margin: 0;">
+    <h2 style="font-size: 1.75rem;">Quotes Manager</h2>
+    <p class="page-subtitle">View, edit, feature, moderate, or delete any quote in the database.</p>
+  </div>
+
+  <button class="btn-pink" onclick="openAddQuoteModal()" style="padding: 0.75rem 1.5rem; font-weight: 800;">
+    ➕ Add New Quote
+  </button>
+</div>
+
+<!-- Filters -->
+<div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.75rem; box-shadow: var(--shadow-sm);">
+  <form action="{{ url_for('admin.all_quotes') }}" method="GET" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+    <div style="flex: 1; min-width: 220px;">
+      <input type="text" name="search" class="form-input" placeholder="Search quote text, author..." value="{{ search }}">
+    </div>
+
+    <div style="min-width: 160px;">
+      <select name="status" class="form-select" onchange="this.form.submit()">
+        <option value="">All Statuses</option>
+        <option value="approved" {% if current_status == 'approved' %}selected{% endif %}>🟢 Approved</option>
+        <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>🟡 Pending</option>
+        <option value="rejected" {% if current_status == 'rejected' %}selected{% endif %}>🔴 Rejected</option>
+      </select>
+    </div>
+
+    <div style="min-width: 160px;">
+      <select name="category_id" class="form-select" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+        <option value="{{ cat.id }}" {% if current_category == cat.id %}selected{% endif %}>{{ cat.icon }} {{ cat.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn-pink" style="padding: 0.7rem 1.2rem;">Filter</button>
+  </form>
+</div>
+
+{% if quotes %}
+<div class="table-responsive">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Quote & Author</th>
+        <th>Category</th>
+        <th>Submitted By</th>
+        <th>Status</th>
+        <th>Likes</th>
+        <th>Featured / Moment</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in quotes %}
+      <tr id="quote-row-{{ q.id }}">
+        <td>#{{ q.id }}</td>
+        <td style="max-width: 300px;">
+          <div style="font-weight: 600; margin-bottom: 0.2rem; color: #0f172a;">“{{ q.text }}”</div>
+          <div style="font-size: 0.85rem; color: var(--rotaract-magenta); font-weight: 600;">— {{ q.author }}</div>
+        </td>
+        <td><span class="category-badge">{{ q.category_icon }} {{ q.category_name }}</span></td>
+        <td style="font-size: 0.85rem;">{{ q.submitted_by_name or 'Rotaract Admin' }}</td>
+        <td>
+          {% if q.status == 'approved' %}
+          <span class="status-badge status-approved">🟢 Approved</span>
+          {% elif q.status == 'pending' %}
+          <span class="status-badge status-pending">🟡 Pending</span>
+          {% else %}
+          <span class="status-badge status-rejected">🔴 Rejected</span>
+          {% endif %}
+        </td>
+        <td style="font-weight: 700; color: #f43f5e;">❤️ {{ q.likes_count }}</td>
+        <td>
+          <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+            <button class="btn-secondary btn-xs {% if q.is_featured %}btn-warning{% endif %}" onclick="toggleFeatured({{ q.id }}, this)">
+              {% if q.is_featured %}⭐ Featured{% else %}☆ Feature{% endif %}
+            </button>
+            <button class="btn-secondary btn-xs {% if q.is_quote_of_the_moment %}btn-pink{% endif %}" onclick="toggleMoment({{ q.id }}, this)">
+              {% if q.is_quote_of_the_moment %}⏱️ Moment Quote{% else %}⏱️ Set Moment{% endif %}
+            </button>
+          </div>
+        </td>
+        <td>
+          <div class="action-toolbar" style="flex-direction: column; align-items: flex-start; gap: 0.35rem;">
+            <button class="btn-secondary btn-xs" onclick='openEditQuoteModal({{ q.id }}, {{ q.text|tojson }}, {{ q.author|tojson }}, {{ q.category_id }})'>
+              ✏️ Edit
+            </button>
+
+            {% if q.status != 'approved' %}
+            <button class="btn-success btn-xs" onclick="updateQuoteStatus({{ q.id }}, 'approved', this)">✓ Approve</button>
+            {% endif %}
+            {% if q.status != 'rejected' %}
+            <button class="btn-danger btn-xs" onclick="updateQuoteStatus({{ q.id }}, 'rejected', this)">✕ Reject</button>
+            {% endif %}
+            <button class="btn-danger btn-xs" onclick="deleteQuote({{ q.id }})">🗑️ Delete</button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p style="text-align: center; color: var(--text-secondary); padding: 3rem;">No quotes found matching criteria.</p>
+{% endif %}
+
+<!-- Add New Quote Modal -->
+<div class="modal-overlay" id="adminAddQuoteModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAddQuoteModal()">&times;</button>
+    <h3 style="margin-bottom: 0.5rem;">➕ Add New Quote</h3>
+    <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Create and publish a new approved quote directly into the pool.</p>
+    
+    <form action="{{ url_for('admin.create_quote') }}" method="POST">
+      <div class="form-group">
+        <label class="form-label" for="addText">Quote Text</label>
+        <textarea id="addText" name="text" class="form-textarea" rows="3" placeholder="Write quote text..." required></textarea>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="addAuthor">Author Name</label>
+          <input type="text" id="addAuthor" name="author" class="form-input" placeholder="e.g. Nelson Mandela or Unknown" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="addCategory">Category</label>
+          <select id="addCategory" name="category_id" class="form-select" required>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}">{{ cat.icon }} {{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;">
+        <button type="button" class="btn-secondary" onclick="closeAddQuoteModal()">Cancel</button>
+        <button type="submit" class="btn-pink">Create & Publish Quote</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Quote Modal -->
+<div class="modal-overlay" id="adminEditQuoteModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeEditQuoteModal()">&times;</button>
+    <h3 style="margin-bottom: 0.5rem;">✏️ Edit Quote</h3>
+    <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Update the quote text, author, or category.</p>
+    
+    <form id="adminEditQuoteForm" method="POST">
+      <div class="form-group">
+        <label class="form-label" for="editQuoteText">Quote Text</label>
+        <textarea id="editQuoteText" name="text" class="form-textarea" rows="3" required></textarea>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="editQuoteAuthor">Author Name</label>
+          <input type="text" id="editQuoteAuthor" name="author" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="editQuoteCategory">Category</label>
+          <select id="editQuoteCategory" name="category_id" class="form-select" required>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}">{{ cat.icon }} {{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;">
+        <button type="button" class="btn-secondary" onclick="closeEditQuoteModal()">Cancel</button>
+        <button type="submit" class="btn-pink">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

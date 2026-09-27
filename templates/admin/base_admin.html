@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard — Rotaract Club St. Thomas College{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="animate-reveal">
+  <!-- Admin Navigation Sub-Header -->
+  <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; box-shadow: var(--shadow-sm);">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span style="font-size: 1.5rem;">⚡</span>
+      <h2 style="font-size: 1.35rem; margin: 0; color: #0f172a;">Rotaract Admin Workspace</h2>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;">
+      <a href="{{ url_for('admin.dashboard') }}" class="btn-secondary {% if request.endpoint == 'admin.dashboard' %}btn-pink{% endif %}" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
+        📊 Overview
+      </a>
+      <a href="{{ url_for('admin.pending_quotes') }}" class="btn-secondary {% if request.endpoint == 'admin.pending_quotes' %}btn-pink{% endif %}" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
+        ⏳ Pending Queue
+      </a>
+      <a href="{{ url_for('admin.all_quotes') }}" class="btn-secondary {% if request.endpoint == 'admin.all_quotes' %}btn-pink{% endif %}" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
+        💬 Quotes Manager
+      </a>
+      <a href="{{ url_for('admin.reports') }}" class="btn-secondary {% if request.endpoint == 'admin.reports' %}btn-pink{% endif %}" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
+        🚩 Reports
+      </a>
+      <a href="{{ url_for('admin.categories') }}" class="btn-secondary {% if request.endpoint == 'admin.categories' %}btn-pink{% endif %}" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">
+        🏷️ Categories
+      </a>
+      
+      <!-- Explicit Admin Logout Button -->
+      <a href="{{ url_for('auth.logout') }}" class="btn-secondary" style="padding: 0.4rem 0.85rem; font-size: 0.85rem; background: #fef2f2; border-color: #fecaca; color: #dc2626; font-weight: 600;">
+        🚪 Admin Logout
+      </a>
+    </div>
+  </div>
+
+  {% block admin_content %}{% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,532 @@
+/* Master UI Component Styles, Physical Folded Paper System & Floating Elements */
+
+/* =========================================================
+   1. PRIMARY ACTION ORANGE SHUFFLE BUTTON (260px x 60px)
+   ========================================================= */
+.btn-shuffle-orange {
+  width: 260px;
+  height: 60px;
+  background: var(--action-orange);
+  color: #FFFFFF;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  border: none;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  box-shadow: 0 14px 35px rgba(255, 122, 0, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  transition: all var(--transition-bounce);
+  user-select: none;
+  text-decoration: none;
+}
+
+.btn-shuffle-orange:hover:not(:disabled) {
+  background: var(--action-orange-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px rgba(255, 122, 0, 0.38);
+}
+
+.btn-shuffle-orange:active:not(:disabled) {
+  transform: scale(0.97);
+  box-shadow: 0 4px 15px rgba(255, 122, 0, 0.25);
+}
+
+.btn-shuffle-orange:disabled {
+  background: #f97316;
+  opacity: 0.9;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.shuffle-icon-svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.45s ease;
+}
+
+.btn-shuffle-orange:hover .shuffle-icon-svg {
+  transform: rotate(12deg);
+}
+
+.btn-shuffle-orange.shuffling .shuffle-icon-svg {
+  animation: spinSlow 0.6s linear infinite;
+}
+
+/* Secondary Action Buttons */
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius-button);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-small);
+}
+
+.btn-secondary:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-pink {
+  background-color: var(--rotaract-magenta);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: var(--radius-button);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 8px 24px rgba(212, 20, 90, 0.25);
+}
+
+.btn-pink:hover {
+  background-color: #b80f4d;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(212, 20, 90, 0.35);
+}
+
+/* =========================================================
+   2. PHYSICAL FOLDED-PAPER STACK & DECK SYSTEM (6-8 LAYERS)
+   ========================================================= */
+.paper-stage {
+  perspective: 1400px;
+  perspective-origin: 50% 30%;
+  max-width: 760px;
+  width: 100%;
+  margin: 1.5rem auto 3rem auto;
+  position: relative;
+  min-height: 480px;
+}
+
+/* Corner Botanical SVG Layer around Paper */
+.paper-botanicals-layer {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.paper-botanical {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.paper-botanical.top-left {
+  top: -10px;
+  left: -10px;
+  opacity: 0.32;
+}
+
+.paper-botanical.bottom-right {
+  bottom: -10px;
+  right: -10px;
+  opacity: 0.30;
+}
+
+/* Floating Hearts Layer (3-7 floating pink hearts) */
+.floating-hearts-layer {
+  position: absolute;
+  top: -30px;
+  left: -20px;
+  right: -20px;
+  bottom: -30px;
+  pointer-events: none;
+  z-index: 35;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  color: var(--rotaract-magenta);
+  font-size: 1.25rem;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transform: translateY(8px) scale(0.8);
+  animation: floatHeart 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Paper Stack Background Deck (Off-Set Rotated Sheets) */
+.paper-stack-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.stack-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 440px;
+  background: var(--paper);
+  border: 1px solid rgba(80, 60, 40, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(42, 30, 20, 0.10);
+  transition: transform 0.45s ease, opacity 0.45s ease;
+}
+
+.layer-1 { transform: translate(-8px, 12px) rotate(-3deg); opacity: 0.45; }
+.layer-2 { transform: translate(6px, 9px) rotate(2deg); opacity: 0.6; }
+.layer-3 { transform: translate(-5px, 6px) rotate(-1.5deg); opacity: 0.75; }
+.layer-4 { transform: translate(4px, 3px) rotate(1deg); opacity: 0.88; }
+.layer-5 { transform: translate(-2px, 1px) rotate(-2deg); opacity: 0.95; }
+
+/* Shuffling Deck Motion */
+.paper-stack-bg.shuffling .layer-1 { transform: translate(-22px, 15px) rotate(-6deg); }
+.paper-stack-bg.shuffling .layer-2 { transform: translate(20px, 10px) rotate(5deg); }
+.paper-stack-bg.shuffling .layer-3 { transform: translate(-14px, 8px) rotate(-4deg); }
+.paper-stack-bg.shuffling .layer-4 { transform: translate(16px, 4px) rotate(4deg); }
+
+/* Active Physical Folded Paper Note */
+.paper-folded-note {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  min-height: 440px;
+  background: var(--paper-light);
+  background-image: radial-gradient(rgba(42, 30, 20, 0.025) 1px, transparent 1px);
+  background-size: 16px 16px;
+  border: 1px solid rgba(80, 60, 40, 0.12);
+  border-radius: var(--radius-paper);
+  padding: 3.5rem 3rem 2.5rem 3rem;
+  box-shadow: var(--paper-shadow);
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease;
+}
+
+/* Crease Lines for 3D Folds */
+.paper-crease-top {
+  position: absolute;
+  top: 33.3%;
+  left: 2%;
+  right: 2%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(42, 30, 20, 0.08), transparent);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.paper-crease-bottom {
+  position: absolute;
+  top: 66.6%;
+  left: 2%;
+  right: 2%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(42, 30, 20, 0.08), transparent);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 3D Flaps for Fold/Unfold Animation */
+.paper-flap-top, .paper-flap-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: var(--paper);
+  border: 1px solid rgba(80, 60, 40, 0.1);
+  z-index: 10;
+  backface-visibility: hidden;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 15px rgba(42, 30, 20, 0.08);
+}
+
+.paper-flap-top {
+  top: 0;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+}
+
+.paper-flap-bottom {
+  bottom: 0;
+  transform-origin: bottom center;
+  transform: rotateX(0deg);
+}
+
+/* Opened state classes */
+.paper-folded-note.is-unfolded .paper-flap-top {
+  transform: rotateX(-170deg);
+  opacity: 0;
+}
+
+.paper-folded-note.is-unfolded .paper-flap-bottom {
+  transform: rotateX(170deg);
+  opacity: 0;
+}
+
+.change-name-btn {
+  background: var(--soft-pink);
+  color: var(--rotaract-magenta);
+  border: 1px solid rgba(212, 20, 90, 0.2);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 12px;
+  cursor: pointer;
+  vertical-align: middle;
+  margin-left: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.change-name-btn:hover {
+  background: var(--rotaract-magenta);
+  color: #FFFFFF;
+}
+
+/* Category Pill & Handwritten Script Captions */
+
+.paper-state-caption {
+  font-family: var(--font-script);
+  font-size: 26px;
+  color: var(--rotaract-magenta);
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  min-height: 36px;
+  transition: opacity 0.35s ease;
+}
+
+.hero-tagline-script {
+  font-family: var(--font-script);
+  font-size: 64px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.1;
+  display: block;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.quote-category-pill {
+  display: inline-block;
+  background: var(--soft-pink);
+  color: var(--rotaract-magenta);
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 0.35rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(212, 20, 90, 0.18);
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px rgba(212, 20, 90, 0.08);
+}
+
+/* Layer 6 for physical 6-8 sheet stack */
+.layer-6 { transform: translate(2px, 0px) rotate(3deg); opacity: 0.98; }
+
+/* Printed Literary Quote Content */
+.paper-quote-content {
+  position: relative;
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.55s ease-out;
+}
+
+.paper-quote-mark {
+  font-family: var(--font-quote);
+  font-size: 56px;
+  line-height: 0.8;
+  color: rgba(212, 20, 90, 0.35);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.paper-quote-text {
+  font-family: var(--font-quote);
+  font-size: 42px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.35;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+
+.paper-quote-author {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: right;
+  display: block;
+}
+
+/* Actions under the unfolded paper */
+.paper-quote-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed rgba(80, 60, 40, 0.15);
+}
+
+.action-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.action-btn-circle {
+  min-width: 44px;
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 22px;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 5px 16px rgba(23, 32, 51, 0.06);
+  transition: all var(--transition-bounce);
+}
+
+.action-btn-circle .count {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.action-btn-circle:hover {
+  transform: translateY(-2px);
+  border-color: var(--rotaract-magenta);
+}
+
+.action-btn-circle.liked {
+  background: var(--soft-pink);
+  border-color: var(--rotaract-magenta);
+  color: var(--rotaract-magenta);
+}
+
+.action-btn-circle.saved {
+  background: var(--soft-orange);
+  border-color: var(--action-orange);
+  color: var(--action-orange);
+}
+
+/* Modals & Share Menu */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(23, 32, 51, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  max-width: 540px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2.25rem;
+  position: relative;
+  box-shadow: var(--shadow-medium);
+  transform: scale(0.95);
+  transition: transform var(--transition-bounce);
+}
+
+.modal-overlay.active .modal-box {
+  transform: scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  line-height: 1;
+}
+
+.share-card-container {
+  background: #f8fafc;
+  border-radius: var(--radius-input);
+  padding: 1.25rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+#shareCanvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: var(--shadow-small);
+}
+
+/* Responsive Paper Typography */
+@media (max-width: 1100px) {
+  .paper-stage {
+    max-width: 660px;
+  }
+  .paper-quote-text {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 768px) {
+  .paper-stage {
+    max-width: calc(100vw - 32px);
+    margin: 1.25rem auto 2rem auto;
+  }
+  .paper-folded-note {
+    padding: 2.5rem 1.5rem 1.75rem 1.5rem;
+    min-height: 360px;
+  }
+  .paper-quote-text {
+    font-size: 27px;
+    line-height: 1.4;
+  }
+}
+

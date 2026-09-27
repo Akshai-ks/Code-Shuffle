@@ -1,0 +1,202 @@
+/* Master 3D Motion Keyframes & Premium Quote Animations */
+
+/* 1. Button Spin & Glow Pulse */
+@keyframes spinSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseOrangeGlow {
+  0%, 100% {
+    box-shadow: 0 14px 35px rgba(255, 122, 0, 0.28);
+  }
+  50% {
+    box-shadow: 0 20px 48px rgba(255, 122, 0, 0.58);
+  }
+}
+
+/* 2. Floating Sparkles, Floral Hearts & Blossoms */
+@keyframes floatSparkleHeart {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.6) rotate(-10deg);
+    filter: drop-shadow(0 2px 6px rgba(212, 20, 90, 0.2));
+  }
+  35% {
+    opacity: 0.95;
+    transform: translateY(-8px) scale(1.15) rotate(6deg);
+  }
+  70% {
+    opacity: 0.85;
+    transform: translateY(-22px) scale(1.0) rotate(-6deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-38px) scale(0.8) rotate(10deg);
+  }
+}
+
+/* 3. 3D Physical Stack Deck Shuffle Dance */
+@keyframes stackShuffleWiggle1 {
+  0%, 100% { transform: translate(-8px, 12px) rotate(-3deg) scale(1); }
+  30% { transform: translate(-28px, -8px) rotate(-8deg) scale(1.02); }
+  60% { transform: translate(-14px, 18px) rotate(-4deg) scale(0.99); }
+}
+
+@keyframes stackShuffleWiggle2 {
+  0%, 100% { transform: translate(6px, 9px) rotate(2deg) scale(1); }
+  35% { transform: translate(24px, -10px) rotate(7deg) scale(1.03); }
+  65% { transform: translate(12px, 14px) rotate(4deg) scale(0.98); }
+}
+
+@keyframes stackShuffleWiggle3 {
+  0%, 100% { transform: translate(-5px, 6px) rotate(-1.5deg) scale(1); }
+  40% { transform: translate(-18px, -12px) rotate(-5deg) scale(1.02); }
+  70% { transform: translate(8px, 10px) rotate(3deg) scale(1); }
+}
+
+/* 4. 3D Paper Rise & Floating Elevation */
+@keyframes paperRiseFromStack3D {
+  0% {
+    transform: translateY(0) rotateX(0deg) rotate(0deg) scale(0.97);
+    box-shadow: 0 6px 18px rgba(42, 30, 20, 0.08);
+  }
+  45% {
+    transform: translateY(-45px) rotateX(12deg) rotate(-2.5deg) scale(1.03);
+    box-shadow: 0 24px 50px rgba(212, 20, 90, 0.18), 0 12px 30px rgba(42, 30, 20, 0.15);
+  }
+  80% {
+    transform: translateY(-8px) rotateX(-4deg) rotate(0.8deg) scale(1.01);
+    box-shadow: 0 16px 40px rgba(42, 30, 20, 0.14);
+  }
+  100% {
+    transform: translateY(0) rotateX(0deg) rotate(0deg) scale(1);
+    box-shadow: var(--paper-shadow);
+  }
+}
+
+/* 5. Paper Fold Back to Deck */
+@keyframes paperFoldBack3D {
+  0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(28px) scale(0.93) rotate(3deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(0) scale(0.97) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* 6. Literary Quote Ink & Shimmer Reveal */
+@keyframes quoteInkShimmerReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 0.9;
+    transform: translateY(-3px) scale(1.01);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* 7. Card Shimmer Border Glow Pulse on Reveal */
+@keyframes cardShimmerGlow {
+  0% {
+    box-shadow: 0 14px 40px rgba(42, 30, 20, 0.10);
+  }
+  50% {
+    box-shadow: 0 18px 50px rgba(212, 20, 90, 0.22), 0 0 25px rgba(255, 122, 0, 0.18);
+    border-color: rgba(212, 20, 90, 0.35);
+  }
+  100% {
+    box-shadow: var(--paper-shadow);
+  }
+}
+
+/* Page Intro & Screen Fade Animation Helpers */
+@keyframes introFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes screenFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes screenFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* Utility Animation Classes */
+.animate-fade-up {
+  animation: introFadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-screen-out {
+  animation: screenFadeOut 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-screen-in {
+  animation: screenFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-paper-rise {
+  animation: paperRiseFromStack3D 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-paper-foldback {
+  animation: paperFoldBack3D 0.5s ease-in-out forwards;
+}
+
+.animate-quote-reveal {
+  animation: quoteInkShimmerReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-card-glow {
+  animation: cardShimmerGlow 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.heart-pop {
+  animation: heartPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glow-orange {
+  animation: pulseOrangeGlow 2.2s infinite;
+}

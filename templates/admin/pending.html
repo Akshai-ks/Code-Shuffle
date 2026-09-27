@@ -1,0 +1,59 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block admin_content %}
+<div class="page-header" style="text-align: left; margin-bottom: 1.5rem;">
+  <h2 style="font-size: 1.75rem;">Pending Moderation Queue</h2>
+  <p class="page-subtitle">Review student-submitted quotes before making them visible to the college community.</p>
+</div>
+
+{% if pending_quotes %}
+<div class="table-responsive">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Quote Content</th>
+        <th>Author</th>
+        <th>Category</th>
+        <th>Submitted By</th>
+        <th>Submission Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in pending_quotes %}
+      <tr id="quote-row-{{ q.id }}">
+        <td>#{{ q.id }}</td>
+        <td style="max-width: 320px;">
+          <div style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 600; color: var(--text-primary);">
+            “{{ q.text }}”
+          </div>
+        </td>
+        <td>— {{ q.author }}</td>
+        <td><span class="category-badge">{{ q.category_icon }} {{ q.category_name }}</span></td>
+        <td>
+          <div style="font-weight: 500;">{{ q.submitted_by_name or 'Anonymous' }}</div>
+          <div style="font-size: 0.8rem; color: var(--text-secondary);">{{ q.submitted_by_email or '' }}</div>
+        </td>
+        <td style="font-size: 0.85rem; color: var(--text-secondary);">{{ q.created_at[:16] }}</td>
+        <td>
+          <div class="action-toolbar">
+            <button class="btn-success btn-xs" onclick="updateQuoteStatus({{ q.id }}, 'approved', this)">✓ Approve</button>
+            <button class="btn-danger btn-xs" onclick="updateQuoteStatus({{ q.id }}, 'rejected', this)">✕ Reject</button>
+            <button class="btn-warning btn-xs" onclick="deleteQuote({{ q.id }})">🗑️ Delete</button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="quote-card text-center" style="padding: 4rem 2rem;">
+  <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+  <h3>Pending Queue is Clear</h3>
+  <p style="color: var(--text-secondary);">All submitted quotes have been moderated.</p>
+</div>
+{% endif %}
+
+{% endblock %}

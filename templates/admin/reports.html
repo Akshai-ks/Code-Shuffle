@@ -1,0 +1,69 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block admin_content %}
+<div class="page-header" style="text-align: left; margin-bottom: 1.5rem;">
+  <h2 style="font-size: 1.75rem;">Reported Quotes</h2>
+  <p class="page-subtitle">Review content flagged by students for inappropriateness or copyright concerns.</p>
+</div>
+
+<!-- Tabs -->
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+  <a href="{{ url_for('admin.reports', status='pending') }}" class="btn-secondary {% if current_status == 'pending' %}btn-pink{% endif %}">
+    🟡 Pending Reports
+  </a>
+  <a href="{{ url_for('admin.reports', status='resolved') }}" class="btn-secondary {% if current_status == 'resolved' %}btn-pink{% endif %}">
+    🟢 Resolved
+  </a>
+  <a href="{{ url_for('admin.reports', status='all') }}" class="btn-secondary {% if current_status == 'all' %}btn-pink{% endif %}">
+    📋 All Reports
+  </a>
+</div>
+
+{% if reports %}
+<div class="table-responsive">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Flagged Quote Text</th>
+        <th>Author</th>
+        <th>Reason</th>
+        <th>Additional Details</th>
+        <th>Reported By</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in reports %}
+      <tr id="report-row-{{ r.id }}">
+        <td>#{{ r.id }}</td>
+        <td style="max-width: 250px; font-weight: 500;">“{{ r.quote_text }}”</td>
+        <td>— {{ r.quote_author }}</td>
+        <td><span class="status-badge status-pending">{{ r.reason }}</span></td>
+        <td style="font-size: 0.85rem; color: var(--text-secondary);">{{ r.details or 'None' }}</td>
+        <td style="font-size: 0.85rem;">{{ r.reporter_name }} ({{ r.reporter_email }})</td>
+        <td>
+          {% if r.status == 'pending' %}
+          <span class="status-badge status-pending">🟡 Pending</span>
+          {% else %}
+          <span class="status-badge status-approved">🟢 {{ r.status|capitalize }}</span>
+          {% endif %}
+        </td>
+        <td>
+          <div class="action-toolbar">
+            {% if r.status == 'pending' %}
+            <button class="btn-success btn-xs" onclick="resolveReport({{ r.id }}, 'dismissed')">Dismiss Report</button>
+            <button class="btn-danger btn-xs" onclick="deleteQuote({{ r.quote_id }}, {{ r.id }})">Delete Quote</button>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p style="text-align: center; color: var(--text-secondary); padding: 3rem;">No reports found in this view.</p>
+{% endif %}
+{% endblock %}
